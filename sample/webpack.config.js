@@ -10,6 +10,6 @@ module.exports = {
     filename: 'main.js'
   },
   plugins: [
-    new ExtensionLoaderPlugin(['js', 'vue'])
+    new ExtensionLoaderPlugin(['js', 'vue', 'scss'])
   ]
 };

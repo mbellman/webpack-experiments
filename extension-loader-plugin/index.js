@@ -2,7 +2,9 @@
  * @internal
  */
 const extensionLoaderMap = {
-  js: require('./load-js')
+  js: require('./load-js'),
+  scss: require('./load-scss'),
+  vue: require('./load-vue')
 };
 
 class ExtensionLoaderPlugin {
@@ -18,10 +20,10 @@ class ExtensionLoaderPlugin {
    */
   apply(compiler) {
     for (const extension of this.extensions) {
-      const createLoader = extensionLoaderMap[extension];
+      const addExtensionLoader = extensionLoaderMap[extension];
 
-      if (createLoader) {
-        compiler.options.module.rules.push(createLoader());
+      if (addExtensionLoader) {
+        addExtensionLoader(compiler.options);
       } else {
         console.warn(`No loader defined for extension '.${extension}'`);
       }
