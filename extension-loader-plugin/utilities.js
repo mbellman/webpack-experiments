@@ -1,20 +1,22 @@
-const { execSync } = require('child_process');
+/**
+ * @typedef Loader
+ * @property {(options: import('webpack').WebpackOptionsNormalized, packageJson: object) => void} load
+ * @property {string[]} dependencies
+ */
 
-function checkDependencies(packageJson, dependencies) {
-  const dependencyMap = {
-    ...packageJson.dependencies,
-    ...packageJson.devDependencies
-  };
+/**
+ * @param {object} config
+ * @param {string[]} config.dependencies
+ * @param {(options: import('webpack').WebpackOptionsNormalized) => void} config.extend
+ *
+ * @returns {Loader}
+ */
+function createLoader({ dependencies, extend }) {
+  const load = options => extend(options);
 
-  for (const dependency of dependencies) {
-    if (!dependencyMap[dependency]) {
-      console.log(`Installing missing dependency '${dependency}'`);
-
-      execSync(`npm i -D ${dependency}`);
-    }
-  }
+  return { load, dependencies };
 }
 
 module.exports = {
-  checkDependencies
+  createLoader
 };

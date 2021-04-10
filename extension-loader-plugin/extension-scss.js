@@ -1,20 +1,21 @@
-const { checkDependencies } = require('./utilities');
+const { createLoader } = require('./utilities');
 
-module.exports = (options, packageJson) => {
-  checkDependencies(packageJson, [
+module.exports = createLoader({
+  dependencies: [
     'style-loader',
     'css-loader',
     'sass-loader',
     'node-sass'
-  ]);
-
-  options.module.rules.push({
-    test: /.scss/,
-    use: [
-      'style-loader',
-      'css-loader',
-      'sass-loader'
-    ],
-    exclude: /node_modules/
-  });
-};
+  ],
+  extend: options => {
+    options.module.rules.push({
+      test: /.scss/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'sass-loader'
+      ],
+      exclude: /node_modules/
+    });
+  }
+});
