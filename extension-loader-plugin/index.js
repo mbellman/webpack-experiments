@@ -6,6 +6,7 @@ const chalk = require('chalk');
  */
 const extensionLoaderMap = {
   js: require('./extension-js'),
+  less: require('./extension-less'),
   scss: require('./extension-scss'),
   vue: require('./extension-vue')
 };
@@ -37,7 +38,7 @@ class ExtensionLoaderPlugin {
       if (extensionLoader) {
         extensionLoader.load(compiler.options, packageJson);
       } else {
-        console.warn(`No loader defined for extension '.${extension}'`);
+        console.warn(`${chalk.yellow('[Extension Loader Plugin]')} No loader defined for extension ${chalk.red(`.${extension}`)}`);
       }
     }
   }
@@ -53,7 +54,7 @@ class ExtensionLoaderPlugin {
       ...packageJson.devDependencies
     };
 
-    let missingDependencies = [];
+    const missingDependencies = new Set();
 
     for (const extension of this.extensions) {
       const extensionLoader = extensionLoaderMap[extension];
@@ -61,13 +62,13 @@ class ExtensionLoaderPlugin {
       if (extensionLoader) {
         const { dependencies } = extensionLoader;
 
-        missingDependencies = missingDependencies.concat(
-          dependencies.filter(dependency => !(dependency in dependencyMap))
-        );
+        dependencies
+          .filter(dependency => !(dependency in dependencyMap))
+          .forEach(dependency => missingDependencies.add(dependency));
       }
     }
 
-    return missingDependencies;
+    return Array.from(missingDependencies);
   }
 
   /**

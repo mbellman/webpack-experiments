@@ -3,19 +3,19 @@ const { createLoader } = require('./utilities');
 module.exports = createLoader({
   dependencies: [
     'css-loader',
-    'sass-loader',
-    'node-sass',
+    'less-loader',
+    'less',
     'mini-css-extract-plugin'
   ],
   extend: options => {
     const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
     options.module.rules.push({
-      test: /.scss$/,
+      test: /.less$/,
       use: [
         MiniCssExtractPlugin.loader,
         'css-loader',
-        'sass-loader'
+        'less-loader'
       ]
     });
 

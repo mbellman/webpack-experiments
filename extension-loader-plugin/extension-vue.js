@@ -8,8 +8,7 @@ module.exports = createLoader({
   extend: options => {
     options.module.rules.push({
       test: /.vue$/,
-      loader: 'vue-loader',
-      exclude: /node_modules/
+      loader: 'vue-loader'
     });
   
     const { VueLoaderPlugin } = require('vue-loader');
